@@ -1,0 +1,655 @@
+/*SQL-TUTORIAL*/
+SQL-Structured Query Language.
+Used to perform CRUD operation on a Relational Database, Create, Read(Retrive), Update and Delete Data.
+
+Types of Databases:
+i.Relational Databases- They use SQL(MySQL, SQL Server, Ms Access, PostgreSQL, Oracle, SQLAlchamey)
+ii.Non-Relational Databases- They use NoSQL(MongoDB, GraphQL, Cassindra)
+
+Database Management System(DBMS) - Used to Write SQL Queries and work with our Database.
+
+->CREATING A NEW DATABASE:
+CREATE DATABASE myDB;
+
+->TO USE A DATABASE:
+USE myDB;
+Or right click on the database and make it the default Schema.
+
+->TO DROP A DATABASE:
+DROP DATABASE myDB;
+
+->ENABLING READ-ONLY MODE ON A DATABASE:
+ALTER DATABASE myDB READ ONLY = 1;
+
+->DISABLING READ-ONLY MODE ON A DATABASE:
+ALTER DATABASE myDB READ ONLY = 0;
+
+->TABLE-Contains rows and columns similar to a Microsoft Excel Spreadsheet.
+
+->CREATING A TABLE:
+CREATE TABLE employees(
+    employee_id INT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    hourly_pay DECIMAL(5, 2),
+    hire_date DATE
+);
+
+->TO SELECT A TABLE:
+SELECT * FROM employees;
+
+->RENAMING A TABLE:
+RENAME TABLE employees TO workers;
+
+->TO DROP A TABLE:
+DROP TABLE employees;
+
+->ALTERNG A TABLE:
+->ADDNG A NEW COLUMN:
+ALTER TABLE employees
+ADD phone_number VARCHAR(50)
+
+->RENAMING A COLUMN OF A DATABASE:
+->THIS DOES NOT CHANGE THE DATA TYPE OF THE COLUMN.
+ALTER TABLE employees
+RENAME COLUMN phone_number TO email;
+
+->TO CHANGE THE DATA TYPE OF A COLUMN.
+ALTER TABLE employees
+MODIFY COLUMN email VARCHAR(100)
+
+->CHANGING THE POSITION OF A COLUMN IN A TABLE:
+ALTER TABLE employees
+MODIFY email VARCHAR(100)
+AFTER last_name;
+
+SELECT * FROM employees;
+
+->MAKING A COLUMN TO BE THE FIRST:
+ALTER TABLE employees
+MODIFY email VARCHAR(100)
+FIRST;
+
+SELECT * FROM employees;
+
+->DROPPING A COLUMN FROM TABLE:
+ALTER TABLE employees
+DROP COLUMN email;
+
+SELECT * FROM employees;
+
+->INSERTNG A SINGLE ROW OF DATA TO A TABLE:
+INSERT INTO employees
+VALUES(1, "Felix", "Kipkirui", 26.50, "2023-01-02");
+
+->INSERTING MULTIPLE ROWS TO A TABLE:
+INSERT INTO employees
+VALUES(2, "Joakim", "Kibet", 29.50, "2023-01-10"),
+      (3, "Kevin", "Kiprotich", 15.50, "2023-01-13"),
+      (4, "Brian", "Kipkirui", 18.50, "2023-01-15"),
+      (5, "Bryan", "Bett", 10.50, "2023-01-17");
+      
+SELECT * FROM employees;
+
+->YOU CAN ADD DATA TO FEW COLUMNS BY EXPLICITLY DEFINING THOSE COLUMNS AFTER THE TABLE NAME:
+->OTHER COLUMNS WILL HAVE NULL VALUES.
+INSERT INTO employees(employee_id, first_name, last_name)
+VALUES(6, "Amos", "Kirui");
+     
+SELECT * FROM employees;
+
+->QUERYING ALL THE DATA FROM A TABLE:
+SELECT * FROM employees;
+
+->QUERYING SPECIFIC COLUMNS FROM A TABLE:
+SELECT first_name, last_name
+FROM employees;
+
+->YOU CAN ALSO CHANGE THE ORDER OF THE COLUMNS BEING QUERIED FROM THE TABLE:
+SELECT last_name, first_name
+FROM employees;
+
+->WHERE CLASE STATEMENT
+->Used when looking for something specific from a tale
+SELECT * 
+FROM employees
+WHERE employee_id = 1;
+
+SELECT * 
+FROM employees
+WHERE first_name = 'Brian';
+
+SELECT * 
+FROM employees 
+WHERE hourly_pay >= 16;
+
+SELECT * 
+FROM employees 
+WHERE hire_date >= '2023-01-07';
+
+->THE NOT OPERATOR:
+SELECT * 
+FROM employees 
+WHERE hire_date != '2023-01-10';
+
+->IS NULL
+->Used to return the NULL values in a column:
+SELECT * 
+FROM employees 
+WHERE hire_date IS NULL;
+
+->IS NOT NULL
+->Used to return the values which are not NULL.
+SELECT * 
+FROM employees 
+WHERE hire_date IS NOT NULL;
+
+->UPDATE:
+->Used to update information in a Database.
+UPDATE  employees
+SET hourly_pay = 15.00
+WHERE employee_id = 6;
+
+SELECT * FROM employees;
+
+->UPDATING MULTIPLE COLUMNS.
+UPDATE  employees
+SET hourly_pay = 15.50,
+    hire_date = '2023-01-19'
+WHERE employee_id = 6;
+
+SELECT * FROM employees;
+
+->UPDATING A VALUE TO NULL.
+UPDATE  employees
+SET hire_date = NULL
+WHERE employee_id = 6;
+
+SELECT * FROM employees;
+
+->UPDATING ALL THE COLUMNS.
+UPDATE  employees
+SET hourly_pay = 15.50;
+
+SELECT * FROM employees;
+
+->DELETE STATEMENT.
+->Used to delete data from a table.
+->DELETING ALL THE ROWS.
+DELETE FROM employees;
+
+->DELETING A SPECIFIC ROW OF DATA.
+DELETE FROM employees
+WHERE employee_id = 6;
+
+->AUTO COMMIT.
+->It automatically saves the transactions in a database.
+->It is always set to ON by default in MySQL.
+->TURNING AUTO-COMMIT OFF.
+SET AUTOCOMMIT = OFF;
+
+->COMMIT 
+->Use to manually save our transactions.
+COMMIT;
+
+->ROLLBACK.
+->USED TO RESTORE THE PREVIOUS TRANSACTION.
+->It creates a safe point.
+ROLLBACK;
+
+->GETTING THE CURRENT DATE, TIME AND DATETIME.
+->CURRENT_DATE()- Function used to return the current date.
+CURRENT_DATE()
+
+->CURRENT_TIME()- Function used to return the current time
+CURRENT_TIME()
+
+->NOW()- Function used to return the current datetime.
+NOW()
+
+INSERT INTO test
+VALUES(CURRENT_DATE(), CURRENT_TIME(), NOW());
+
+SELECT * FROM test;
+
+->UNIQUE CONSTRAINT.
+->Ensures that all values in a column are different.
+->ADDING THE UNIQUE CONSTRAINT WHEN CREATING A TABLE.
+CREATE TABLE products(
+    product_id INT,
+    product_name VARCHAR(25) UNIQUE,
+    price DECIMAL(4, 2)
+);
+
+->ADDING THE UNIQUE CONSTRAINT AFTER CREATING A TABLE.
+ALTER TABLE products
+ADD CONSTRAINT 
+UNIQUE(product_name);
+
+->NOT NULL CONSTRAINT.
+->Used in columns which you do not want to have null values.
+->NOT NULL WHEN CREATNG A TABLE.
+CREATE TABLE products(
+    product_id INT,
+    product_name VARCHAR(25) UNIQUE,
+    price DECIMAL(4, 2) NOT NULL
+);
+
+->ADDNG A NOT NULL CONSTRAINT TO AN EXISTING TABLE.
+ALTER TABLE products
+MODIFY price DECIMAL(4, 2) NOT NULL;
+
+->CHECK CONSTRAINT.
+->CHECK constraint is used to limit values fed into a database.
+->ADDING A CHECK constraint when creating a Table.
+CREATE TABLE employees(
+    employee_id INT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    hourly_pay DECIMAL(5, 2),
+    hire_date DATE,
+    CONSTRAINT chk_hourly_pay CHECK(hourly_pay >= 10.00)
+);
+
+->ADDING A CHECK CONSTRAINT TO AN EXISTING TABLE.
+ALTER TABLE employees
+ADD CONSTRAINT chk_hourly_pay CHECK(hourly_pay >= 10.00);
+
+->DELETING A CHECK CONSTRAINT.
+ALTER TABLE employees
+DROP CHECK chk_hourly_pay;
+
+->DEFAULT CONSTRAINT
+->Used to enter value to a column which are set when a user does not feed the value.
+->ADDING A DEFALT CONSTRAINT TO AN NEW TABLE:
+CREATE TABLE products(
+    product_id INT,
+    product_name VARCHAR(25) UNIQUE,
+    price DECIMAL(4, 2) DEFAULT 0
+);
+
+->ADDING A DEFAULT CONSTRAINT TO AN EXISTING TABLE:
+ALTER TABLE products
+ALTER price SET DEFAULT 0;
+
+INSERT INTO products(product_id, product_name)
+VALUES  (104, 'Straw'),
+        (105, 'Napkin'),
+        (106, 'Fork'),
+        (107, 'Spoon');
+        
+SELECT * FROM products;
+
+->PRIMARY KEY CONSTRAINT
+->Used to uniqely identify a row.
+->It must be unique and not null. 
+
+->ADDING A PRIMARY KEY TO A NEW TABLE.
+CREATE TABLE transactions(
+    transaction_id INT NOT NULL PRIMARY KEY,
+    amount DECIMAL(5, 2)
+);
+
+->ADDING A PRIMARY KEY CONSTRAINT TO AN EXISTING TABLE
+ALTER TABLE transactions
+ADD CONSTRAINT
+PRIMARY KEY(transaction_id);
+
+->THE AUTO_INCREAMENT ATTRIBUTE.
+->Can be used to automatically populate a key such as the primary key.
+CREATE TABLE transactions(
+    transaction_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    amount DECIMAL(5, 2)
+);
+
+->CHANGING THE VALUE WHERE AUTO-INCREMENT STARTS.
+ALTER TABLE transactions
+AUTO_INCREMENT = 1000;
+
+->FOREIGN KEY CONSTRAINT.
+->Primary key of a table found in another table.
+->Creates a link btw two tables and prevents any action that would try to destroy it.
+->ADDING A FOREIGN KEY CONSTRAINT TO A NEW TABLE.
+CREATE TABLE transactions(
+	transaction_id INT PRIMARY KEY AUTO_INCREMENT,
+    amount DECIMAL(5, 2),
+    customer_id INT,
+    FOREIGN KEY(customer_id) REFERENCES customers(customer_id)
+);
+
+SELECT * FROM transactions;
+
+->DROPPING A FOEREIGN KEY CONSTRAINT.
+ALTER TABLE transactions
+DROP FOREIGN KEY transactions_ibfk_1;
+
+->ADDING A FOREIGN KEY CONSTRAINT TO AN EXISTING TABLE AND RENAMING THE FOREIGN KEY.
+ALTER TABLE transactions
+ADD CONSTRAINT fk_customer_id
+FOREIGN KEY (customer_id) REFERENCES customers(customer_id);
+
+->JOIN CLAUSE.
+->Used to combine columns of two or more tables.
+
+->INNER JOIN
+SELECT *
+FROM transactions INNER JOIN customers
+ON transactions.customer_id = customers.customer_id;
+
+SELECT transaction_id, amount, first_name, last_name
+FROM transactions INNER JOIN customers
+ON transactions.customer_id = customers.customer_id;
+
+->LEFT JOIN
+SELECT *
+FROM transactions LEFT JOIN customers
+ON transactions.customer_id = customers.customer_id;
+
+->RIGTH JOIN
+SELECT *
+FROM transactions RIGHT JOIN customers
+ON transactions.customer_id = customers.customer_id;
+
+->FUNCTIONS IN MYSQL.
+->COUNT() FUNCTION
+->Used to count the number of rows in a table
+SELECT COUNT(amount)
+FROM transactions;
+
+->GIVING THE COLUMN AN ALIAS
+SELECT COUNT(amount) AS 'Todays Transactions'
+FROM transactions;
+
+->MAX() FUNCTION
+->Used to get the maiximum value from a column.
+SELECT MAX(amount) AS MAXIMUM
+FROM transactions;
+
+->MIN() FUNCTION
+->Used to find the minimum value from a column.
+SELECT MIN(amount) AS MINIMUM
+FROM transactions;
+
+->AVG() FUNCTION.
+->Used to calculate the average of a column.
+SELECT AVG(amount) AS AVERAGE
+FROM transactions;
+
+->SUM() FUNCTION
+->Used to find the sum of a column.
+SELECT SUM(amount) AS TOTAL
+FROM transactions;
+
+->CONCAT() FUNCTION
+->Used to concatenate values of two columns.
+
+->LOGICAL OPERATORS
+-AND LOGICAL OPERATOR.
+->Used to wrap two or more Conditions together.
+->Both conditions should be true.
+SELECT * FROM employees
+WHERE hire_date > '2023-01-14' AND job = 'Cook';
+
+->OR LOGICAL OPERATOR.
+->Executed if one of the conditions is true.
+SELECT * FROM employees
+WHERE job = 'Cook' OR job = 'Cashier';
+
+->NOT LOGICAL OPERATOR.
+->Reverses the condition given.
+SELECT * FROM employees
+WHERE NOT job = 'Manager';
+
+SELECT * FROM employees
+WHERE NOT job = 'Manager' AND NOT job = 'Asst. Manager';
+
+->BETWEEN LOGICAL OPERATOR.
+SELECT * FROM employees
+WHERE hire_date BETWEEN '2023-01-04' AND '2023-01-16';
+
+->IN LOGICAL OPERATOR.
+SELECT * FROM employees
+WHERE job IN ('Manager', 'Cashier', 'Cook');
+
+->WILD CARD CHARACHERS(%, _)
+-Used to one or more characters in a string.
+SELECT * FROM employees
+WHERE first_name LIKE 'b%';
+
+SELECT * FROM employees
+WHERE hire_date LIKE '2023%';
+
+SELECT * FROM employees
+WHERE last_name LIKE '%h';
+
+SELECT * FROM employees
+WHERE first_name LIKE 'fe%';
+
+SELECT * FROM employees
+WHERE job LIKE 'Coo_';
+
+SELECT * FROM employees
+WHERE hire_date LIKE '____-01-__';
+
+SELECT * FROM employees 
+WHERE hire_date LIKE '____-__-17';
+
+SELECT * FROM employees
+WHERE job LIKE '_a%';
+
+->ORDER BY CLAUSE
+->Used to order the rows either in ascending or decsending order.
+SELECT * FROM employees
+ORDER BY last_name ASC; 
+
+SELECT * FROM employees
+ORDER BY last_name DESC; 
+
+SELECT * FROM transactions
+ORDER BY amount, customer_id; 
+
+->LIMIT CLAUSE.
+->Used to limit the number of records that are queried.
+->Usefull when dealing with a large dataset.
+SELECT * FROM 
+customers
+LIMIT 1;
+
+SELECT * FROM  employees 
+ORDER BY first_name LIMIT 2;
+
+SELECT * FROM  employees 
+ORDER BY last_name DESC LIMIT 2;
+
+->You can also add the offset to the limit clause
+->The first number is the offset.
+SELECT * FROM  employees 
+LIMIT 1, 1;
+
+->UNION OPERATOR.
+->Does not include duplicates.
+->It combines the results of two SELECT statements.
+->The number of columns should be the same.
+SELECT first_name, last_name FROM employees
+UNION
+SELECT first_name, last_name FROM customers;
+
+->UNION ALL- It includes duplicates;
+SELECT first_name, last_name FROM employees
+UNION ALL
+SELECT first_name, last_name FROM customers;
+
+->SELF-JOIN
+->A table joins to a copy of itself.
+SELECT a.customer_id, a.first_name, a.last_name,
+	CONCAT(b.first_name, ' ', b.last_name) AS 'Referee'
+FROM customers AS a
+INNER JOIN customers AS b
+ON a.reffered_by = b.customer_id;
+
+SELECT a.customer_id, a.first_name, a.last_name,
+	CONCAT(b.first_name, ' ', b.last_name) AS 'Referee'
+FROM customers AS a
+LEFT JOIN customers AS b
+ON a.reffered_by = b.customer_id;
+
+SELECT a.employee_id, a.first_name, a.last_name,
+	CONCAT(b.first_name, ' ', b.last_name) AS 'Reports To'
+FROM employees AS a
+INNER JOIN employees AS b
+ON a.supervisor_id = b.employee_id;
+
+SELECT a.employee_id, a.first_name, a.last_name,
+		CONCAT(b.first_name, ' ', b.last_name) AS 'Reports To'
+FROM employees AS a
+LEFT JOIN employees AS b
+ON a.supervisor_id = b.employee_id;
+
+->VIEWS
+->They are virtual tables made of fields from one or more real tables.
+->They are no real, but they can be interracted upon as if they were real tables;
+->CREATING A VIEW
+CREATE VIEW employee_attendance AS
+SELECT first_name, last_name FROM employees;
+
+CREATE VIEW customer_emails AS
+SELECT email FROM customers;
+
+->DROPPING A VIEW
+DROP VIEW employee_attendance;
+
+->INDEX
+->BTree data structure uesd to find values more quickly within a specified column.
+->MySQL Performs searches sequentially through a column which takes alot of time(Expensive operation)
+->Searching takes less time and Selecting too but Updating takes alot of time when using indexes.
+->SHOWING THE CURRENT INDEXES
+SHOW INDEXES FROM customers;
+
+->CREATING AND INDEX
+CREATE INDEX last_name_idx ON
+customers(last_name);
+
+->MULTI-COLUMN INDEX
+CREATE INDEX last_name_first_name_idx
+ON customers(last_name, first_name);
+
+->DROPPING AN INDEX.
+ALTER TABLE customers
+DROP INDEX last_name_idx;
+
+->SUBQUERY
+->Query within a query.
+SELECT first_name, last_name, hourly_pay, 
+	(SELECT AVG(hourly_pay) FROM employees) AS 'AVERAGE PAY'
+FROM employees;
+
+SELECT first_name, last_name, hourly_pay
+FROM employees
+WHERE hourly_pay > (SELECT AVG(hourly_pay) FROM employees);
+
+->GROUP BY
+->Aggregate all rows by a specific column.
+->Oftenly used by aggregate functions such SUM, COUNT, MAX, MIN, AVG.
+SELECT SUM(amount), order_date
+FROM transactions
+GROUP BY order_date;
+
+SELECT MAX(amount), order_date
+FROM transactions
+GROUP BY order_date;
+
+SELECT MIN(amount), order_date
+FROM transactions
+GROUP BY order_date;
+
+SELECT AVG(amount), order_date
+FROM transactions
+GROUP BY order_date;
+
+SELECT COUNT(amount), order_date
+FROM transactions
+GROUP BY order_date;
+
+SELECT SUM(amount), customer_id
+FROM transactions
+GROUP BY customer_id;
+
+SELECT MAX(amount), customer_id
+FROM transactions
+GROUP BY customer_id;
+
+SELECT MIN(amount), customer_id
+FROM transactions
+GROUP BY customer_id;
+
+SELECT AVG(amount), customer_id
+FROM transactions
+GROUP BY customer_id;
+
+SELECT COUNT(amount), customer_id
+FROM transactions
+GROUP BY customer_id;
+
+->USING THE HAVING INSTEAD OF WHERE CLAUSE.
+SELECT COUNT(amount), customer_id
+FROM transactions
+GROUP BY customer_id
+HAVING COUNT(amount) > 1;
+
+SELECT COUNT(amount), customer_id
+FROM transactions
+GROUP BY customer_id
+HAVING COUNT(amount) > 1 AND customer_id IS NOT NULL;
+
+->ROLLUP CLAUSE.
+->Extension of the GROUP BY clause produces another row with the GRAND TOTAL.
+SELECT COUNT(transaction_id), order_date
+FROM transactions
+GROUP BY order_date WITH ROLLUP;
+
+SELECT SUM(amount), order_date
+FROM transactions
+GROUP BY order_date WITH ROLLUP;
+
+SELECT COUNT(transaction_id) AS 'NO OF TIMES', customer_id
+FROM transactions
+GROUP BY customer_id WITH ROLLUP;
+
+SELECT SUM(hourly_pay) AS 'Hourly Pay', employee_id
+FROM employees
+GROUP BY employee_id WITH ROLLUP;
+
+->ON DELETE SET NULL- When the FK is deleted it replaces the FK with NULL.
+->ON DELETE CASCADE-When FK is delete, delete the row.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
